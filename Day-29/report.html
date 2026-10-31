@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stockify - Reports</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <h2 class="brand">✦ STOCKIFY</h2>
+
+        <p class="side-label">MAIN MENU</p>
+
+        <a href="index.html">▦ Dashboard</a>
+        <a href="sales.html">▤ Sales Management</a>
+        <a class="active" href="reports.html">▥ Reports</a>
+
+        <button class="logout-link" onclick="logout()">
+            ⇥ Logout
+        </button>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <h1>Reports & Analytics</h1>
+                <p>Monitor your inventory and sales performance.</p>
+            </div>
+
+            <a href="index.html" class="btn">
+                Back to Dashboard
+            </a>
+        </header>
+
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <span class="stat-icon purple">▣</span>
+                <p>Total Products</p>
+                <h2 id="reportProducts">0</h2>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon blue">▤</span>
+                <p>Total Stock</p>
+                <h2 id="reportStock">0</h2>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon green">₹</span>
+                <p>Inventory Value</p>
+                <h2 id="reportValue">₹0</h2>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon orange">!</span>
+                <p>Low Stock</p>
+                <h2 id="reportLow">0</h2>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon pink">!</span>
+                <p>Out of Stock</p>
+                <h2 id="reportOut">0</h2>
+            </article>
+
+            <article class="stat-card">
+                <span class="stat-icon teal">₹</span>
+                <p>Total Sales Revenue</p>
+                <h2 id="reportRevenue">₹0</h2>
+            </article>
+
+        </section>
+
+        <section class="panel">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Inventory Report</h2>
+                    <p>Complete product stock information.</p>
+                </div>
+
+                <button class="btn" onclick="exportInventoryCSV()">
+                    ↓ Export CSV
+                </button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Total Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reportTable">
+                        <tr>
+                            <td colspan="6" class="empty">
+                                Loading inventory...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <section class="panel">
+
+            <h2>Low Stock Alerts</h2>
+
+            <ul id="lowStockList" class="simple-list">
+                <li>Loading stock alerts...</li>
+            </ul>
+
+        </section>
+
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

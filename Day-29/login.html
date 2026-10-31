@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stockify | Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="login-logo">✦</div>
+    <h1>STOCKIFY</h1>
+    <p class="muted">Inventory & Sales Management</p>
+    <h2>Welcome Back!</h2>
+    <p class="muted">Sign in to continue to your dashboard.</p>
+    <form id="loginForm" class="stack-form">
+      <label>Email Address<input id="email" type="email" placeholder="admin@gmail.com" required></label>
+      <label>Password<input id="password" type="password" placeholder="Enter password" required></label>
+      <p id="loginError" class="error-message"></p>
+      <button class="btn full-btn" type="submit">Sign In →</button>
+    </form>
+    <div class="demo-login"><strong>Demo Login</strong><br>Email: admin@gmail.com<br>Password: admin123</div>
+  </div>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html> 

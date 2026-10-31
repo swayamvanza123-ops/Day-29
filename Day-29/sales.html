@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stockify | Sales Management</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sales.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2 class="brand">✦ STOCKIFY</h2>
+    <p class="side-label">MAIN MENU</p>
+    <a href="index.html">▦ Dashboard</a>
+    <a class="active" href="sales.html">▤ Sales Management</a>
+    <a href="reports.html">▥ Reports</a>
+    <button class="logout-link" onclick="logout()">⇥ Logout</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><h1>Sales Management</h1><p>Create sales, manage customers and track payments.</p></div>
+      <button class="btn" onclick="logout()">Logout</button>
+    </header>
+
+    <section class="stats-grid sales-stats">
+      <article class="stat-card"><p>Total Sales</p><h2 id="totalSales">0</h2></article>
+      <article class="stat-card"><p>Total Revenue</p><h2 id="totalRevenue">₹0</h2></article>
+      <article class="stat-card"><p>Amount Received</p><h2 id="totalPaid">₹0</h2></article>
+      <article class="stat-card"><p>Pending Amount</p><h2 id="totalPending">₹0</h2></article>
+      <article class="stat-card"><p>Products Sold</p><h2 id="productsSold">0</h2></article>
+      <article class="stat-card"><p>Average Sale</p><h2 id="averageOrder">₹0</h2></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><h2>Customer Management</h2><p>Add and manage your customers.</p></div></div>
+      <form id="customerForm" class="form-grid">
+        <input type="hidden" id="customerEditId">
+        <label>Customer Name<input id="customerName" required placeholder="Customer name"></label>
+        <label>Phone Number<input id="customerPhone" required maxlength="10" placeholder="10-digit mobile number"></label>
+        <label>Email Address<input id="customerEmail" type="email" placeholder="customer@email.com"></label>
+        <label>Address<input id="customerAddress" placeholder="Customer address"></label>
+        <div class="form-actions"><button class="btn" type="submit">Save Customer</button><button class="btn secondary" type="reset" onclick="resetCustomerForm()">Clear</button></div>
+      </form>
+      <div class="filter-row"><input id="customerSearch" placeholder="Search customers..." oninput="renderCustomers()"></div>
+      <div class="table-wrap"><table><thead><tr><th>Customer ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Actions</th></tr></thead><tbody id="customerTable"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><h2>Create New Sale</h2><p>Select a customer and add one or more products.</p></div></div>
+      <form id="saleForm">
+        <div class="form-grid">
+          <label>Invoice Number<input id="saleId" readonly></label>
+          <label>Sale Date<input id="saleDate" type="date" required></label>
+          <label>Customer<select id="saleCustomer" required><option value="">Select customer</option></select></label>
+          <label>Payment Method<select id="paymentMethod"><option>Cash</option><option>UPI</option><option>Card</option><option>Bank Transfer</option></select></label>
+        </div>
+        <div class="product-picker">
+          <label>Product<select id="productSelect"><option value="">Select product</option></select></label>
+          <label>Available Stock<input id="availableStock" readonly></label>
+          <label>Unit Price (₹)<input id="unitPrice" readonly></label>
+          <label>Quantity<input id="itemQuantity" type="number" min="1" value="1"></label>
+          <button class="btn add-item-btn" type="button" onclick="addSaleItem()">+ Add Item</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th></tr></thead><tbody id="saleItemsTable"><tr><td colspan="5" class="empty">No products added yet.</td></tr></tbody></table></div>
+        <div class="totals-panel">
+          <div class="form-grid">
+            <label>Discount Type<select id="discountType"><option value="fixed">Fixed Amount (₹)</option><option value="percent">Percentage (%)</option></select></label>
+            <label>Discount Value<input id="discountValue" type="number" min="0" step="0.01" value="0"></label>
+            <label>Tax Rate (%)<input id="taxRate" type="number" min="0" max="100" step="0.01" value="0"></label>
+            <label>Amount Received (₹)<input id="paymentAmount" type="number" min="0" step="0.01" value="0"></label>
+          </div>
+          <div class="total-lines">
+            <p>Subtotal <strong id="subtotalDisplay">₹0.00</strong></p>
+            <p>Discount <strong id="discountDisplay">₹0.00</strong></p>
+            <p>Tax <strong id="taxDisplay">₹0.00</strong></p>
+            <p class="grand-total">Grand Total <strong id="grandTotalDisplay">₹0.00</strong></p>
+            <p>Remaining Amount <strong id="remainingDisplay">₹0.00</strong></p>
+          </div>
+        </div>
+        <button class="btn full-btn" type="submit">✓ Finalize Sale & Generate Invoice</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><h2>Sales History</h2><p>Search, filter and manage previous transactions.</p></div><button class="btn secondary" onclick="exportSalesCSV()">Export CSV</button></div>
+      <div class="filter-row">
+        <input id="salesSearch" placeholder="Search invoice or customer..." oninput="renderSales()">
+        <select id="statusFilter" onchange="renderSales()"><option value="">All payment statuses</option><option>Paid</option><option>Partially Paid</option><option>Pending</option><option>Cancelled</option></select>
+        <input id="filterFrom" type="date" onchange="renderSales()">
+        <input id="filterTo" type="date" onchange="renderSales()">
+        <button class="btn secondary" onclick="clearSalesFilters()">Clear</button>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Invoice</th><th>Customer</th><th>Date</th><th>Total</th><th>Paid</th><th>Payment Status</th><th>Actions</th></tr></thead><tbody id="salesTable"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><h2>Sales Analytics</h2><p>Revenue and product performance.</p></div></div>
+      <div class="chart-grid">
+        <div class="chart-box"><h3>Daily Sales</h3><canvas id="dailySalesChart"></canvas></div>
+        <div class="chart-box"><h3>Top Selling Products</h3><canvas id="topProductsChart"></canvas></div>
+        <div class="chart-box"><h3>Payment Status</h3><canvas id="paymentChart"></canvas></div>
+      </div>
+    </section>
+
+    <div class="two-columns">
+      <section class="panel"><h2>Stock Movement History</h2><div class="table-wrap"><table><thead><tr><th>Product</th><th>Change</th><th>Reason</th><th>Date</th></tr></thead><tbody id="movementTable"></tbody></table></div></section>
+      <section class="panel"><h2>Notifications</h2><ul id="notificationList" class="simple-list"></ul></section>
+    </div>
+    <section class="panel"><h2>Activity Log</h2><ul id="activityList" class="simple-list"></ul></section>
+  </main>
+
+  <div class="modal hidden" id="invoiceModal">
+    <div class="modal-card invoice-modal">
+      <div class="modal-actions"><button class="btn secondary" onclick="closeInvoice()">Close</button><button class="btn" onclick="printInvoice()">Print Invoice</button></div>
+      <div id="invoiceContent"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/activityLog.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/stockMovement.js"></script>
+  <script src="js/customers.js"></script>
+  <script src="js/invoice.js"></script>
+  <script src="js/sales.js"></script>
+</body>
+</html>
